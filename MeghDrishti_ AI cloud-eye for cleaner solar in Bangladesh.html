@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MeghDrishti: AI cloud-eye for cleaner solar in Bangladesh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8EFF3;--surface:#F7FAFC;--raised:#FFFFFF;--ink:#122838;--muted:#4D6676;--line:#C8D6DE;
+  --sky:#2B6A96;--sun:#C98200;--sun-soft:#FFF0CC;--leaf:#2A7549;--leaf-soft:#DCEFE3;
+  --alert:#A9361F;--alert-soft:#F8DCD4;--amber:#8E5A00;--amber-soft:#FCEBC6;
+  --band90:rgba(43,106,150,.15);--band50:rgba(43,106,150,.32);
+  --font:'Bricolage Grotesque','Segoe UI',system-ui,-apple-system,sans-serif;
+  --bn:'Hind Siliguri','Noto Sans Bengali','Vrinda',sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1822;--surface:#112230;--raised:#16293A;--ink:#E4EDF2;--muted:#95ACBA;--line:#284252;
+  --sky:#7DB8DF;--sun:#F3B63F;--sun-soft:#352B13;--leaf:#6CC592;--leaf-soft:#15301F;
+  --alert:#F08D77;--alert-soft:#3B1E18;--amber:#F0BE5C;--amber-soft:#382C11;
+  --band90:rgba(125,184,223,.16);--band50:rgba(125,184,223,.34);
+}}
+:root[data-theme="dark"]{
+  --bg:#0C1822;--surface:#112230;--raised:#16293A;--ink:#E4EDF2;--muted:#95ACBA;--line:#284252;
+  --sky:#7DB8DF;--sun:#F3B63F;--sun-soft:#352B13;--leaf:#6CC592;--leaf-soft:#15301F;
+  --alert:#F08D77;--alert-soft:#3B1E18;--amber:#F0BE5C;--amber-soft:#382C11;
+  --band90:rgba(125,184,223,.16);--band50:rgba(125,184,223,.34);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55}
+a{color:var(--sky)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.bn{font-family:var(--bn)}
+.num{font-variant-numeric:tabular-nums}
+
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--ink)}
+.brand small{font-family:var(--bn);font-weight:600;color:var(--sky);font-size:1rem}
+nav a{color:var(--muted);text-decoration:none;margin-left:20px;font-size:.95rem}
+nav a:hover{color:var(--ink)}
+@media(max-width:760px){nav{display:none}}
+
+.hero{padding:44px 0 26px}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:end}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:24px}}
+h1{font-size:clamp(2.3rem,5.4vw,4.1rem);line-height:1;font-weight:800;letter-spacing:-.025em;margin:0 0 14px;max-width:13ch}
+.bnline{font-family:var(--bn);font-size:clamp(1.15rem,2vw,1.4rem);color:var(--sky);margin:0 0 14px}
+.lede{max-width:56ch;color:var(--muted);font-size:1.08rem;margin:0 0 22px}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;background:none}
+.btn.primary{background:var(--ink);color:var(--bg)}
+.why{margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.why li{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.why svg{margin-top:3px}
+.why b{display:block;font-size:1.02rem}
+.why span{color:var(--muted);font-size:.93rem}
+
+.console{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:18px}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--raised)}
+.seg button{border:0;background:none;padding:7px 14px;border-radius:999px;font:inherit;font-size:.9rem;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+select{font:inherit;font-size:.9rem;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--raised);color:var(--ink);max-width:100%}
+.demo-note{font-size:.82rem;color:var(--ink);background:var(--sun-soft);padding:7px 12px;border-radius:10px;margin-left:auto}
+@media(max-width:900px){.demo-note{margin-left:0}}
+
+.grid-main{display:grid;grid-template-columns:minmax(250px,380px) 1fr;gap:22px;margin-top:18px}
+@media(max-width:880px){.grid-main{grid-template-columns:1fr}}
+.skybox{position:relative;max-width:420px;margin:0 auto;width:100%}
+#sky{width:100%;aspect-ratio:1/1;display:block}
+.camtag{position:absolute;top:8px;left:8px;font-size:.76rem;background:rgba(6,16,24,.62);color:#fff;padding:3px 8px;border-radius:6px}
+.approach{margin:12px 0 0;font-size:.95rem;display:flex;gap:8px;align-items:flex-start}
+.approach i{flex:none;width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--muted)}
+.approach.on i{background:var(--sun)}
+.cap{font-size:.82rem;color:var(--muted);margin:6px 0 0}
+
+.timeline{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.timeline input[type=range]{flex:1;min-width:160px;accent-color:var(--sky)}
+.clock{font-weight:800;font-size:1.35rem;min-width:4.2ch}
+
+.action{border-radius:16px;padding:16px 20px;border:1.5px solid var(--line);background:var(--raised)}
+.action.lv-red{background:var(--alert-soft);border-color:var(--alert)}
+.action.lv-amber{background:var(--amber-soft);border-color:var(--amber)}
+.action.lv-green{background:var(--leaf-soft);border-color:var(--leaf)}
+.action .tag{font-size:.82rem;font-weight:600}
+.lv-red .tag{color:var(--alert)}.lv-amber .tag{color:var(--amber)}.lv-green .tag{color:var(--leaf)}
+.action h2{margin:2px 0 4px;font-size:clamp(1.3rem,2.4vw,1.7rem);line-height:1.12;letter-spacing:-.01em}
+.action p{margin:0;color:var(--muted)}
+.action ul{margin:10px 0 0;padding-left:20px}
+.action li{margin:2px 0}
+.action .bn{margin-top:8px;font-size:1.02rem}
+
+.readouts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 10px}
+.ro{padding:4px 0 4px 12px;border-left:3px solid var(--line)}
+.ro:first-child{border-color:var(--ink)}
+.ro b{display:block;font-size:1.45rem;line-height:1.2}
+.ro span{font-size:.8rem;color:var(--muted)}
+@media(max-width:520px){.readouts{grid-template-columns:1fr 1fr}.ro:last-child{grid-column:span 2}}
+.chart svg{width:100%;height:auto;display:block}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+.chart-head h3{margin:0;font-size:1rem}
+.toggle{font-size:.85rem;color:var(--muted);display:flex;gap:6px;align-items:center;cursor:pointer}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--muted);margin-top:6px}
+.sw{display:inline-block;width:18px;height:10px;margin-right:6px;vertical-align:middle;border-radius:2px}
+
+.row{display:grid;gap:18px;margin-top:18px}
+.row-3{grid-template-columns:1.1fr 1fr .9fr}
+@media(max-width:1000px){.row-3{grid-template-columns:1fr 1fr}.row-3 .phone-panel{grid-column:span 2}}
+@media(max-width:640px){.row-3{grid-template-columns:1fr}.row-3 .phone-panel{grid-column:auto}}
+.panel{background:var(--raised);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.panel h3{margin:0 0 2px;font-size:1.05rem}
+.panel .sub{margin:0 0 12px;color:var(--muted);font-size:.87rem}
+.counters{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
+.counter b{font-size:1.85rem;display:block;line-height:1.1}
+.counter span{font-size:.8rem;color:var(--muted)}
+details.assume{margin-top:12px;font-size:.85rem}
+details.assume summary{cursor:pointer;color:var(--sky)}
+.assume label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}
+input[type=number]{width:92px;font:inherit;font-size:.9rem;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.note{font-size:.8rem;color:var(--muted);margin:10px 0 0}
+
+.phone{border:7px solid var(--ink);border-radius:30px;padding:10px 10px 14px;background:var(--surface);height:330px;max-width:270px;margin:0 auto;overflow:hidden}
+.phone .bar{text-align:center;font-size:.76rem;color:var(--muted);margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.msg{font-family:var(--bn);background:var(--raised);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:8px 10px;font-size:.88rem;margin-bottom:8px;line-height:1.5}
+.msg time{display:block;font-size:.72rem;color:var(--muted)}
+.msg.red{border-left:4px solid var(--alert)}.msg.amber{border-left:4px solid var(--amber)}.msg.green{border-left:4px solid var(--leaf)}
+.msg.new{animation:pop .4s ease-out}
+@keyframes pop{from{transform:translateY(8px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.msg.new{animation:none}}
+
+.soil{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media(max-width:760px){.soil{grid-template-columns:1fr}}
+.soil input[type=range]{width:100%;accent-color:var(--sun)}
+.bars{display:grid;gap:10px;margin-top:6px}
+.barrow{font-size:.85rem}
+.barrow .track{height:14px;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:3px}
+.barrow .fill{height:100%}
+.verdict{margin-top:14px;padding:10px 12px;border-radius:10px;font-weight:600}
+
+section.block{padding:70px 0 10px}
+h2.sec{font-size:clamp(1.7rem,3.2vw,2.5rem);margin:0 0 10px;letter-spacing:-.015em;line-height:1.08;max-width:24ch}
+.intro{color:var(--muted);max-width:62ch;margin:0 0 28px}
+ol.flow{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(5,1fr);gap:20px;padding:0;margin:0}
+ol.flow li{counter-increment:s;border-top:3px solid var(--sky);padding-top:12px}
+ol.flow li::before{content:counter(s);font-weight:800;font-size:1.6rem;color:var(--sky);display:block;line-height:1}
+ol.flow b{display:block;margin:6px 0 4px}
+ol.flow span{font-size:.9rem;color:var(--muted)}
+@media(max-width:900px){ol.flow{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){ol.flow{grid-template-columns:1fr}}
+
+.evidence{display:grid;grid-template-columns:1.4fr 1fr;gap:30px;align-items:start}
+@media(max-width:900px){.evidence{grid-template-columns:1fr}}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--raised)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.93rem;min-width:520px}
+th,td{text-align:right;padding:10px 14px;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--muted);font-size:.84rem}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:0}
+tr.ours td{font-weight:800;background:var(--sun-soft)}
+.tcap{font-size:.84rem;color:var(--muted);margin:10px 0 0}
+.callout{border-left:4px solid var(--sun);padding:4px 0 4px 16px;margin-bottom:22px}
+.callout b{font-size:2rem;display:block;line-height:1.1}
+.limits{margin:0;padding-left:18px;color:var(--muted);font-size:.93rem}
+.limits li{margin-bottom:8px}
+
+ol.road{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+ol.road li{border-top:3px solid var(--line);padding-top:12px}
+ol.road li.done{border-color:var(--leaf)}
+ol.road li.next{border-color:var(--sun)}
+ol.road time{font-weight:800;display:block}
+ol.road b{display:block;margin:2px 0 6px}
+ol.road span{font-size:.9rem;color:var(--muted)}
+@media(max-width:900px){ol.road{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){ol.road{grid-template-columns:1fr}}
+
+footer{margin-top:70px;border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="MeghDrishti home">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="11" cy="12" r="4" fill="#E9A21A"/><path d="M9 19c0-2.6 2.2-4.3 4.6-4.1.8-1.8 2.6-3 4.6-3 2.8 0 5 2.1 5.1 4.8 1.5.3 2.5 1.4 2.5 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      MeghDrishti <small>মেঘদৃষ্টি</small>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#demo">Live demo</a><a href="#how">How it works</a><a href="#evidence">Evidence</a><a href="#roadmap">Roadmap</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>See the cloud before the power drops.</h1>
+        <p class="bnline">মেঘ আসার আগেই দেখুন, ডিজেল পোড়ানোর আগেই ভাবুন।</p>
+        <p class="lede">MeghDrishti watches the sky with a low-cost camera and tells solar operators in Bangladesh what the next two hours will bring, so they stop running diesel gensets just in case.</p>
+        <div class="btns">
+          <a class="btn primary" href="#demo">Watch the live demo</a>
+          <a class="btn" href="#how">See how it works</a>
+        </div>
+      </div>
+      <ul class="why" aria-label="Why this matters">
+        <li><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17a4 4 0 0 1 .5-8A6 6 0 0 1 18 9a4 4 0 0 1 0 8Z" fill="none" stroke="var(--sky)" stroke-width="2"/></svg><div><b>Monsoon clouds move fast</b><span>A rooftop plant can lose half its output within minutes, then recover just as quickly.</span></div></li>
+        <li><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="8" width="16" height="10" rx="2" fill="none" stroke="var(--alert)" stroke-width="2"/><path d="M8 8V5h8v3M8 13h8" stroke="var(--alert)" stroke-width="2"/></svg><div><b>Diesel runs just in case</b><span>With load shedding and costly fuel imports, factories keep gensets on standby because they cannot see a drop coming.</span></div></li>
+        <li><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="var(--sun)" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="var(--sun)"/></svg><div><b>Hourly forecasts can't see a cloud</b><span>A sky camera can. In our research it gave the biggest gain on partly cloudy days.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="demo" aria-label="Live demo">
+    <div class="wrap">
+      <div class="console">
+        <div class="controls">
+          <div class="seg" role="group" aria-label="Weather day">
+            <button type="button" data-scen="clear" aria-pressed="false">Clear</button>
+            <button type="button" data-scen="partly" aria-pressed="true">Partly cloudy</button>
+            <button type="button" data-scen="overcast" aria-pressed="false">Overcast</button>
+          </div>
+          <label class="visually-hidden" for="site" style="position:absolute;left:-9999px">Site</label>
+          <select id="site">
+            <option value="factory">Gazipur garment factory, 500 kWp rooftop (illustrative)</option>
+            <option value="skippd">Stanford SKIPP'D site, 29.6 kW (benchmark)</option>
+          </select>
+          <span class="demo-note">Demo mode: simulated sky and power, shaped on our SKIPP'D results. Live model connects in Round 2.</span>
+        </div>
+
+        <div class="grid-main">
+          <div>
+            <div class="skybox">
+              <canvas id="sky" role="img" aria-label="Fisheye view of the sky from the rooftop camera, with clouds moving toward the sun"></canvas>
+              <div class="camtag num" id="camtag">CAM-01</div>
+            </div>
+            <p class="approach" id="approach" aria-live="polite"><i></i><span>Scanning the sky.</span></p>
+            <p class="cap">Rooftop fisheye camera, one image per minute. The dashed line marks a cloud on course for the sun.</p>
+            <div class="timeline">
+              <button type="button" class="btn" id="play" aria-pressed="true">Pause</button>
+              <div class="seg" role="group" aria-label="Replay speed">
+                <button type="button" data-speed="1" aria-pressed="true">1×</button>
+                <button type="button" data-speed="3" aria-pressed="false">3×</button>
+                <button type="button" data-speed="6" aria-pressed="false">6×</button>
+              </div>
+            </div>
+            <div class="timeline">
+              <span class="clock num" id="clock">09:00</span>
+              <input type="range" id="scrub" min="30" max="690" step="1" value="180" aria-label="Time of day">
+            </div>
+          </div>
+
+          <div>
+            <div class="action" id="action" aria-live="polite"></div>
+            <div class="readouts" id="readouts"></div>
+            <div class="chart">
+              <div class="chart-head">
+                <h3>Solar output, next 2 hours</h3>
+                <label class="toggle"><input type="checkbox" id="reveal"> Show what actually happened</label>
+              </div>
+              <div id="chart"></div>
+              <div class="legend">
+                <span><i class="sw" style="background:var(--ink)"></i>Measured</span>
+                <span><i class="sw" style="background:var(--sky)"></i>Forecast median</span>
+                <span><i class="sw" style="background:var(--band50)"></i>50% range</span>
+                <span><i class="sw" style="background:var(--band90)"></i>90% range</span>
+                <span><i class="sw" style="background:none;border-top:2px dashed var(--muted);height:0"></i>Persistence</span>
+                <span><i class="sw" style="background:none;border-top:2px dotted var(--sun);height:0"></i>Clear-sky limit</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row row-3">
+          <div class="panel">
+            <h3>Diesel kept off today</h3>
+            <p class="sub">Compared with keeping the genset on standby whenever the sky is not clear.</p>
+            <div class="counters">
+              <div class="counter"><b class="num" id="cL">0</b><span>litres of diesel saved</span></div>
+              <div class="counter"><b class="num" id="cT">0</b><span>BDT saved</span></div>
+              <div class="counter"><b class="num" id="cC">0</b><span>kg CO₂ avoided</span></div>
+              <div class="counter"><b class="num" id="cH">0</b><span>standby hours avoided</span></div>
+            </div>
+            <details class="assume">
+              <summary>Edit assumptions</summary>
+              <label>Diesel price (BDT per litre) <input type="number" id="price" min="0" step="1" value="105"></label>
+              <label>Genset standby burn (litres per hour) <input type="number" id="idle" min="0" step="0.5" value="10"></label>
+              <p class="note">CO₂ uses 2.68 kg per litre of diesel. MeghDrishti puts the genset on standby only during red alerts.</p>
+            </details>
+          </div>
+
+          <div class="panel">
+            <h3>What the model looks at</h3>
+            <p class="sub">Share of attention per source as the forecast looks further ahead.</p>
+            <div id="gate"></div>
+            <div class="legend">
+              <span><i class="sw" style="background:var(--sky)"></i>Sky images</span>
+              <span><i class="sw" style="background:var(--sun)"></i>Recent power</span>
+              <span><i class="sw" style="background:var(--muted);opacity:.5"></i>Weather forecast</span>
+            </div>
+            <p class="note">Pattern from our paper (Fig. 6): the camera matters more for longer leads and on cloudy days. Weights are descriptive, not causal.</p>
+          </div>
+
+          <div class="panel phone-panel">
+            <h3>Operator alerts in Bangla</h3>
+            <p class="sub">Sent by SMS or app when the advice changes.</p>
+            <div class="phone" aria-live="polite">
+              <div class="bar">মেঘদৃষ্টি সতর্কবার্তা</div>
+              <div id="sms"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="panel">
+            <h3>Panel cleaning advisor</h3>
+            <p class="sub">On clear periods, measured output should match the physics-based clear-sky limit. A growing gap means dust on the panels.</p>
+            <div class="soil">
+              <div>
+                <label for="days" class="num" style="font-weight:600">Days since last cleaning: <span id="daysV">14</span></label>
+                <input type="range" id="days" min="0" max="60" value="14">
+                <div class="assume" style="margin-top:6px">
+                  <label>Dust loss per day (%) <input type="number" id="rate" min="0" step="0.05" value="0.3"></label>
+                  <label>Electricity value (BDT per kWh) <input type="number" id="tariff" min="0" step="0.5" value="12"></label>
+                  <label>Cost of one cleaning (BDT) <input type="number" id="ccost" min="0" step="100" value="4000"></label>
+                </div>
+                <p class="note">Dust loss rate is an assumption until measured at the Dhaka pilot site.</p>
+              </div>
+              <div>
+                <div class="bars" id="soilbars"></div>
+                <div class="verdict" id="verdict"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <h2 class="sec">From one sky photo to one clear instruction</h2>
+      <p class="intro">Every five minutes MeghDrishti runs the same loop on a small computer at the site. It keeps working on a weak internet connection because the model is small enough to run locally.</p>
+      <ol class="flow">
+        <li><b>Capture</b><span>A Raspberry Pi with a fisheye lens photographs the whole sky every minute, for under BDT 15,000.</span></li>
+        <li><b>Correct</b><span>Timestamps are checked against the sun's path, and pvlib computes the clear-sky limit for the site.</span></li>
+        <li><b>Forecast</b><span>HAMF fuses the last three sky images, 60 minutes of power and the clear-sky prior into 19 quantiles for 5 to 120 minutes ahead.</span></li>
+        <li><b>Decide</b><span>Rules turn the forecast range into one action: charge the battery, delay a load, keep diesel off, or prepare the genset.</span></li>
+        <li><b>Alert</b><span>The operator gets the action in Bangla on the dashboard and by SMS, with how confident the forecast is.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="evidence">
+    <div class="wrap">
+      <h2 class="sec">Built on tested research, with honest limits</h2>
+      <p class="intro">The forecasting model comes from our research on SKIPP'D, a public dataset of sky images and PV power (517 days). The paper is under double-blind review.</p>
+      <div class="evidence">
+        <div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Model (20 test days)</th><th scope="col">RMSE (kW)</th><th scope="col">Skill vs persistence</th><th scope="col">Probabilistic skill</th><th scope="col">90% range width</th></tr></thead>
+              <tbody>
+                <tr class="ours"><td>HAMF (ours)</td><td>3.38</td><td>17.9%</td><td>34.8%</td><td>5.6 kW</td></tr>
+                <tr><td>TiDE-style dense model</td><td>3.47</td><td>15.8%</td><td>31.3%</td><td>6.6 kW</td></tr>
+                <tr><td>Probabilistic persistence</td><td>4.12</td><td>0.1%</td><td>0.0%</td><td>9.8 kW</td></tr>
+                <tr><td>Smart persistence</td><td>4.12</td><td>0.0%</td><td>&minus;16.6%</td><td>&ndash;</td></tr>
+                <tr><td>SUNSET CNN (benchmark)</td><td>4.25</td><td>&minus;3.1%</td><td>&minus;80.9%</td><td>&ndash;</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tcap">HAMF beats persistence and the SUNSET benchmark with p &lt; 0.001. Its 90% range is 43% narrower than probabilistic persistence while covering more observations (87.6% vs 83.4%).</p>
+        </div>
+        <div>
+          <div class="callout">
+            <b class="num">328,309</b>
+            records in the public dataset carry a daylight-saving timestamp error that we found. Left uncorrected, it inflates skill by about 7 points. MeghDrishti checks every site's clock against the sun before training.
+          </div>
+          <h3 style="margin:0 0 8px;font-size:1.05rem">What we still need to prove</h3>
+          <ul class="limits">
+            <li>The model was trained at one site in California. Performance in Bangladesh is untested until our Dhaka camera pilot.</li>
+            <li>The gain over a strong dense baseline (TiDE-style) is not statistically significant (p = 0.20).</li>
+            <li>Packaged weather forecasts added no skill at these horizons. The camera does the heavy lifting.</li>
+            <li>Diesel and CO₂ numbers in this demo come from the stated assumptions, not field measurements.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="roadmap">
+    <div class="wrap">
+      <h2 class="sec">Plan through the Grand Finale</h2>
+      <p class="intro">Each round moves one step from research result to a working system on a Bangladeshi rooftop.</p>
+      <ol class="road">
+        <li class="done"><time>30 Sep</time><b>Idea and evidence</b><span>Proposal, research results and this interactive prototype.</span></li>
+        <li class="next"><time>14 Oct</time><b>Working prototype</b><span>HAMF served through an API, this dashboard on live inference, and a sky camera installed on a Dhaka rooftop.</span></li>
+        <li><time>24 Oct</time><b>Live demo at AIUB</b><span>Forecasts from real Dhaka sky images and a first local comparison against persistence.</span></li>
+        <li><time>After</time><b>Pilot</b><span>Fine-tune on local data, SMS gateway, satellite fallback for sites without a camera, and trials with one factory and one mini-grid.</span></li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MeghDrishti, Hack for Humanity 2026, Track 1: Climate Resilience &amp; Environmental Sustainability.</span>
+    <span>Python, PyTorch, pvlib, FastAPI, Raspberry Pi, Next.js</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const SITES={factory:{cap:500,idle:10,clean:4000},skippd:{cap:29.6,idle:1.5,clean:500}};
+const SCEN={
+  clear:{seed:11,n:5,rmin:.06,rmax:.12,omin:.15,omax:.35,vx:.008,base:.96,name:'Clear day'},
+  partly:{seed:23,n:46,rmin:.08,rmax:.2,omin:.6,omax:.95,vx:.014,base:.97,name:'Partly cloudy day'},
+  overcast:{seed:37,n:80,rmin:.14,rmax:.3,omin:.45,omax:.85,vx:.010,base:.55,name:'Overcast day'}
+};
+const T0=30,T1=690;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const S={scen:'partly',site:'factory',t:180,playing:!reduce,speed:1,reveal:false,price:105,idle:10};
+let W,lastSmsKey='';
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hr(a,b,c){const x=Math.sin(a*12.9898+b*78.233+c*37.719)*43758.5453;return x-Math.floor(x)}
+function gauss(a,b,c){const u=Math.max(1e-6,hr(a,b,c)),v=hr(a+7,b+3,c+1);return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+const bnD=s=>String(s).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const fmt=m=>{m=Math.round(m);const h=6+Math.floor(m/60),mm=m%60;return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0')};
+function sunPos(m){const a=Math.PI*m/720;return{x:-0.78*Math.cos(a),y:0.62-0.85*Math.sin(a)}}
+const pcsU=m=>(m<0||m>720)?0:.86*Math.pow(Math.max(0,Math.sin(Math.PI*m/720)),1.15);
+const cap=()=>SITES[S.site].cap;
+const pcs=m=>cap()*pcsU(m);
+const fk=v=>cap()>100?Math.round(v).toLocaleString('en-US'):v.toFixed(1);
+
+function build(key){
+  const c=SCEN[key],r=mulberry32(c.seed),span=2.8+c.vx*720,clouds=[];
+  for(let i=0;i<c.n;i++){
+    const rad=c.rmin+r()*(c.rmax-c.rmin),puffs=[],np=5+Math.floor(r()*3);
+    for(let j=0;j<np;j++)puffs.push({dx:(r()-.5)*1.2*rad,dy:(r()-.5)*.7*rad,rr:rad*(.45+r()*.35)});
+    clouds.push({x0:-1.4-c.vx*720+r()*span,y:-1+r()*2,r:rad,o:c.omin+r()*(c.omax-c.omin),puffs});
+  }
+  const k=new Float32Array(721);
+  for(let m=0;m<=720;m++){
+    const sp=sunPos(m);let pass=1;
+    for(const cl of clouds){const x=cl.x0+c.vx*m,d=Math.hypot(x-sp.x,cl.y-sp.y);if(d<cl.r)pass*=1-cl.o*Math.sqrt(1-d/cl.r)}
+    let b=c.base;if(key==='overcast')b*=.85+.15*Math.sin(m/37+1.3);
+    k[m]=Math.min(1.12,Math.max(.04,b*(1-.8*(1-pass))+(r()-.5)*.02));
+  }
+  W={key,c,clouds,k,fc:new Map(),al:new Map()};lastSmsKey='';
+}
+function kAvg(a,b){a=Math.max(0,a);b=Math.min(720,b);let s=0,n=0;for(let m=a;m<=b;m++){s+=W.k[m];n++}return n?s/n:0}
+function pAvg(a,b){a=Math.max(0,a);b=Math.min(720,b);let s=0,n=0;for(let m=a;m<=b;m++){s+=W.k[m]*pcs(m);n++}return n?s/n:0}
+
+function forecast(t){
+  if(W.fc.has(t))return W.fc.get(t);
+  const kn=kAvg(t-4,t);let mu=0,n=0,ss=0;const a=Math.max(0,t-60);
+  for(let m=a;m<=t;m++){mu+=W.k[m];n++}mu/=n;for(let m=a;m<=t;m++)ss+=(W.k[m]-mu)**2;const sd=Math.sqrt(ss/n);
+  const f={kn,med:[],q05:[],q25:[],q75:[],q95:[]};const cl=v=>Math.min(1.15,Math.max(0,v));
+  for(let i=0;i<24;i++){
+    const h=5*(i+1),m2=Math.min(720,t+h),kt=kAvg(m2-2,m2+2),w=.1+.85*Math.exp(-h/110);
+    const med=cl(w*kt+(1-w)*kn+gauss(t,h,W.c.seed)*.025*(h/60)),s=(.03+.0022*h)*(.4+3*sd);
+    f.med.push(med);f.q05.push(cl(med-1.645*s*1.15));f.q25.push(cl(med-.674*s*1.1));f.q75.push(cl(med+.674*s*.9));f.q95.push(cl(med+1.645*s*.85));
+  }
+  W.fc.set(t,f);return f;
+}
+function alertAt(t){
+  if(W.al.has(t))return W.al.get(t);
+  const f=forecast(t),kn=f.kn;let a;
+  if(pcsU(t)<.12)a={level:'low'};
+  else{
+    const min=(arr,n)=>Math.min(...arr.slice(0,n));
+    const drop15=(kn-min(f.med,3))/kn;let first=-1;
+    for(let i=0;i<6;i++)if(f.med[i]<.7*kn){first=i;break}
+    const pct=Math.round((kn-min(f.med,6))/kn*100),risk=(kn-min(f.q05,6))/kn;
+    if(drop15>=.3&&first>=0)a={level:'red',mins:5*(first+1),pct,genset:f.med[5]<.7*kn&&f.med[8]<.7*kn};
+    else if(risk>=.35)a={level:'amber',pct:Math.round(risk*100)};
+    else a={level:'green',low:kn<.6};
+  }
+  W.al.set(t,a);return a;
+}
+function startTime(){for(let s=150;s<=600;s+=5)if(alertAt(s).level==='red')return Math.max(T0,s-15);return 180}
+
+function approach(t){
+  const sp=sunPos(t);let best=null;
+  for(const cl of W.clouds){
+    if(cl.o<.5)continue;const x=cl.x0+W.c.vx*t;
+    if(Math.abs(cl.y-sp.y)<cl.r*.8&&x<sp.x){const tt=(sp.x-x-cl.r*.6)/W.c.vx;if(tt>0&&tt<=40&&(!best||tt<best.tt))best={cl,x,tt}}
+  }
+  return best;
+}
+
+function drawSky(t){
+  const cv=$('#sky'),dpr=window.devicePixelRatio||1,size=cv.clientWidth;if(!size)return null;
+  if(cv.width!==Math.round(size*dpr)){cv.width=Math.round(size*dpr);cv.height=Math.round(size*dpr)}
+  const ctx=cv.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,size,size);
+  const c=size/2,R=size/2-4,P=(x,y)=>[c+x*R,c+y*R],sp=sunPos(t),[sx,sy]=P(sp.x,sp.y),key=W.key;
+  ctx.save();ctx.beginPath();ctx.arc(c,c,R,0,Math.PI*2);ctx.clip();
+  const cols={clear:['#b6e1fa','#2a6ca6'],partly:['#c0dcef','#3a6b91'],overcast:['#c5cdd3','#65727c']}[key];
+  let g=ctx.createRadialGradient(sx,sy,0,c,c,R*1.3);g.addColorStop(0,cols[0]);g.addColorStop(1,cols[1]);ctx.fillStyle=g;ctx.fillRect(0,0,size,size);
+  const low=Math.pow(1-Math.max(0,Math.sin(Math.PI*t/720)),3);
+  if(low>.01){ctx.fillStyle=`rgba(255,160,80,${.35*low})`;ctx.fillRect(0,0,size,size)}
+  const vis=Math.min(1,W.k[Math.round(t)]/W.c.base);
+  g=ctx.createRadialGradient(sx,sy,0,sx,sy,R*.42);g.addColorStop(0,`rgba(255,252,232,${.95*vis})`);g.addColorStop(.25,`rgba(255,240,190,${.5*vis})`);g.addColorStop(1,'rgba(255,240,190,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,size,size);
+  ctx.beginPath();ctx.arc(sx,sy,R*.045,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${.35+.65*vis})`;ctx.fill();
+  const sh=key==='overcast'?'208,214,219':'255,255,255';
+  for(const cl of W.clouds){
+    const x=cl.x0+W.c.vx*t;if(Math.abs(x)>1.5)continue;
+    for(const p of cl.puffs){
+      const [px,py]=P(x+p.dx,cl.y+p.dy),rr=p.rr*R;
+      let gg=ctx.createRadialGradient(px+rr*.12,py+rr*.22,0,px+rr*.12,py+rr*.22,rr);
+      gg.addColorStop(0,`rgba(70,86,102,${cl.o*.3})`);gg.addColorStop(1,'rgba(70,86,102,0)');
+      ctx.fillStyle=gg;ctx.beginPath();ctx.arc(px+rr*.12,py+rr*.22,rr,0,Math.PI*2);ctx.fill();
+      gg=ctx.createRadialGradient(px,py,0,px,py,rr);
+      gg.addColorStop(0,`rgba(${sh},${cl.o})`);gg.addColorStop(.6,`rgba(${sh},${cl.o*.75})`);gg.addColorStop(1,`rgba(${sh},0)`);
+      ctx.fillStyle=gg;ctx.beginPath();ctx.arc(px,py,rr,0,Math.PI*2);ctx.fill();
+    }
+  }
+  if(key==='overcast'){ctx.fillStyle='rgba(190,198,204,.28)';ctx.fillRect(0,0,size,size)}
+  const ap=approach(t);
+  if(ap){
+    const [cx,cy]=P(ap.x,ap.cl.y);ctx.setLineDash([6,5]);ctx.strokeStyle='rgba(255,205,70,.95)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(sx,sy);ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,ap.cl.r*R*1.05,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+  }
+  g=ctx.createRadialGradient(c,c,R*.72,c,c,R);g.addColorStop(0,'rgba(8,18,28,0)');g.addColorStop(1,'rgba(8,18,28,.55)');ctx.fillStyle=g;ctx.fillRect(0,0,size,size);
+  ctx.restore();
+  ctx.beginPath();ctx.arc(c,c,R,0,Math.PI*2);ctx.strokeStyle='rgba(10,25,35,.55)';ctx.lineWidth=3;ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.75)';ctx.font='600 11px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('N',c,c-R+14);ctx.fillText('S',c,c+R-14);ctx.fillText('E',c-R+14,c);ctx.fillText('W',c+R-14,c);
+  return ap;
+}
+
+function path(pts){return pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')}
+function drawChart(t,issue){
+  const Wd=800,Hd=290,pl=54,pr=14,pt=12,pb=28,C=cap(),x0=t-120,x1=t+120;
+  const X=m=>pl+(m-x0)/(x1-x0)*(Wd-pl-pr),Y=v=>pt+(1-v/C)*(Hd-pt-pb);
+  let s=`<svg viewBox="0 0 ${Wd} ${Hd}" role="img" aria-label="Measured solar output for the past two hours and forecast range for the next two hours"><defs><clipPath id="pa"><rect x="${pl}" y="${pt}" width="${Wd-pl-pr}" height="${Hd-pt-pb}"/></clipPath></defs>`;
+  for(const f of [0,.25,.5,.75,1]){const y=Y(f*C);s+=`<line x1="${pl}" x2="${Wd-pr}" y1="${y}" y2="${y}" style="stroke:var(--line)"/><text x="${pl-8}" y="${y+4}" text-anchor="end" font-size="11" style="fill:var(--muted)">${fk(f*C)}</text>`}
+  s+=`<text x="12" y="${pt+(Hd-pt-pb)/2}" font-size="11" transform="rotate(-90 12 ${pt+(Hd-pt-pb)/2})" text-anchor="middle" style="fill:var(--muted)">kW</text>`;
+  for(let m=Math.ceil(x0/30)*30;m<=x1;m+=30){if(m<0||m>720)continue;s+=`<text x="${X(m)}" y="${Hd-8}" text-anchor="middle" font-size="11" style="fill:var(--muted)">${fmt(m)}</text>`}
+  s+=`<g clip-path="url(#pa)">`;
+  const cs=[];for(let m=Math.max(0,x0);m<=Math.min(720,x1);m+=2)cs.push([X(m),Y(pcs(m))]);
+  s+=`<path d="${path(cs)}" fill="none" style="stroke:var(--sun)" stroke-width="1.6" stroke-dasharray="2 4"/>`;
+  const f=forecast(issue),v0=pAvg(issue-4,issue),q={q05:[[X(issue),Y(v0)]],q25:[[X(issue),Y(v0)]],q75:[[X(issue),Y(v0)]],q95:[[X(issue),Y(v0)]],med:[[X(issue),Y(v0)]]},per=[[X(issue),Y(v0)]];
+  for(let i=0;i<24;i++){const m=issue+5*(i+1);if(m>720)break;const pc=pcs(m);for(const kk of ['q05','q25','q75','q95','med'])q[kk].push([X(m),Y(f[kk][i]*pc)]);per.push([X(m),Y(f.kn*pc)])}
+  s+=`<path d="${path(q.q95.concat([...q.q05].reverse()))} Z" style="fill:var(--band90)"/>`;
+  s+=`<path d="${path(q.q75.concat([...q.q25].reverse()))} Z" style="fill:var(--band50)"/>`;
+  s+=`<path d="${path(per)}" fill="none" style="stroke:var(--muted)" stroke-width="1.5" stroke-dasharray="6 5"/>`;
+  s+=`<path d="${path(q.med)}" fill="none" style="stroke:var(--sky)" stroke-width="2.6"/>`;
+  const past=[];for(let m=Math.max(0,x0);m<=t;m++)past.push([X(m),Y(W.k[m]*pcs(m))]);
+  s+=`<path d="${path(past)}" fill="none" style="stroke:var(--ink)" stroke-width="1.6"/>`;
+  if(S.reveal){const fu=[];for(let m=t;m<=Math.min(720,x1);m++)fu.push([X(m),Y(W.k[m]*pcs(m))]);s+=`<path d="${path(fu)}" fill="none" style="stroke:var(--ink)" stroke-width="1.4" stroke-dasharray="1 3" opacity=".8"/>`}
+  s+=`</g><line x1="${X(t)}" x2="${X(t)}" y1="${pt}" y2="${Hd-pb}" style="stroke:var(--ink)" stroke-width="1" stroke-dasharray="3 3"/><text x="${X(t)+5}" y="${pt+12}" font-size="11" font-weight="600" style="fill:var(--ink)">now</text></svg>`;
+  $('#chart').innerHTML=s;
+}
+
+function drawGate(){
+  const Wd=360,Hd=160,pl=30,pb=22,pt=6,bw=(Wd-pl-6)/24,I={clear:[.12,.45],partly:[.15,.62],overcast:[.2,.75]}[W.key];
+  let s=`<svg viewBox="0 0 ${Wd} ${Hd}" role="img" aria-label="Model attention per data source by forecast lead time">`;
+  const Y=v=>pt+(1-v)*(Hd-pt-pb);
+  for(const v of [0,.5,1])s+=`<text x="${pl-6}" y="${Y(v)+4}" text-anchor="end" font-size="10" style="fill:var(--muted)">${v}</text>`;
+  for(let i=0;i<24;i++){
+    const h=5*(i+1),p=h/120;let img=I[0]+(I[1]-I[0])*Math.pow(p,.7),wx=.47+(.16-.47)*Math.pow(p,.6);if(img+wx>.97)wx=.97-img;const hi=1-img-wx;
+    const x=pl+i*bw+1;let y0=1;
+    for(const [v,st] of [[img,'fill:var(--sky)'],[hi,'fill:var(--sun)'],[wx,'fill:var(--muted);opacity:.45']]){s+=`<rect x="${x}" y="${Y(y0)}" width="${bw-2}" height="${Y(y0-v)-Y(y0)}" style="${st}"/>`;y0-=v}
+  }
+  for(const [h,l] of [[5,'5 min'],[60,'60'],[120,'120 min']]){const i=h/5-1;s+=`<text x="${pl+i*bw+bw/2}" y="${Hd-6}" text-anchor="${h===120?'end':h===5?'start':'middle'}" font-size="10" style="fill:var(--muted)">${l}</text>`}
+  $('#gate').innerHTML=s+'</svg>';
+}
+
+function actionHTML(a){
+  if(a.level==='red')return{cls:'lv-red',html:`<span class="tag">Red alert</span><h2>Cloud drop in about ${a.mins} min</h2><p>Output may fall about ${a.pct}% as a cloud crosses the sun.</p><ul><li>Pre-charge the battery now</li><li>Delay flexible loads (pumps, chillers) by 20 min</li><li>${a.genset?'The drop looks long: put the genset on standby':'The drop looks short: keep diesel off'}</li></ul><p class="bn">প্রায় ${bnD(a.mins)} মিনিট পর মেঘের কারণে উৎপাদন কমবে। এখনই ব্যাটারি চার্জ করুন।</p>`};
+  if(a.level==='amber')return{cls:'lv-amber',html:`<span class="tag">Watch</span><h2>Possible dip within 30 min</h2><p>In the worst 5% of cases output is about ${a.pct}% lower. The battery can cover it.</p><ul><li>Keep diesel off</li><li>Hold the battery above 50%</li></ul><p class="bn">হালকা ওঠানামা হতে পারে। ব্যাটারি সামলাবে, ডিজেল বন্ধ রাখুন।</p>`};
+  if(a.level==='green')return{cls:'lv-green',html:`<span class="tag">All clear</span><h2>${a.low?'Low but steady for 30 min':'Stable sun for the next 30 min'}</h2><p>${a.low?'Thick cloud keeps output low, but no sudden drop is expected.':'No cloud is heading for the sun.'}</p><ul><li>Keep diesel off</li><li>Good time to run flexible loads</li></ul><p class="bn">${a.low?'উৎপাদন কম কিন্তু স্থির থাকবে। ডিজেল বন্ধ রাখুন।':'রোদ স্থির থাকবে। ডিজেল বন্ধ রাখুন, এখন পাম্প চালানোর ভালো সময়।'}</p>`};
+  return{cls:'',html:`<span class="tag">Low sun</span><h2>Solar output is small right now</h2><p>Near sunrise and sunset the plant runs on grid or battery as usual.</p><p class="bn">সূর্য নিচে, সোলার উৎপাদন এখন কম।</p>`};
+}
+function smsText(a,s){
+  const tm=bnD(fmt(s));
+  if(a.level==='red')return `⚠️ ${tm}: প্রায় ${bnD(a.mins)} মিনিট পর সোলার উৎপাদন ~${bnD(a.pct)}% কমতে পারে। ব্যাটারি চার্জ করুন, পাম্প/চিলার ২০ মিনিট পিছিয়ে দিন।${a.genset?' জেনারেটর প্রস্তুত রাখুন।':' ডিজেল বন্ধ রাখুন।'}`;
+  if(a.level==='amber')return `ℹ️ ${tm}: আগামী ৩০ মিনিটে হালকা ওঠানামা হতে পারে। ব্যাটারি সামলাবে, ডিজেল বন্ধ রাখুন।`;
+  return a.low?`✅ ${tm}: উৎপাদন কম কিন্তু স্থির। হঠাৎ পতনের আশঙ্কা নেই, ডিজেল বন্ধ রাখুন।`:`✅ ${tm}: আগামী ৩০ মিনিট রোদ স্থির। ডিজেল বন্ধ রাখুন, এখন পাম্প চালানোর ভালো সময়।`;
+}
+function renderSms(issue){
+  const key=W.key+issue;if(key===lastSmsKey)return;lastSmsKey=key;
+  const msgs=[];let last=null;
+  for(let s=T0;s<=issue;s+=5){const a=alertAt(s);if(a.level!=='low'&&a.level!==last){msgs.push({s,a});last=a.level}}
+  const show=msgs.slice(-4).reverse();
+  $('#sms').innerHTML=show.length?show.map((m,i)=>`<div class="msg ${m.a.level}${i===0&&m.s===issue?' new':''}"><time>${bnD(fmt(m.s))}</time>${smsText(m.a,m.s)}</div>`).join(''):'<div class="msg">সূর্য ওঠার পর সতর্কবার্তা শুরু হবে।</div>';
+}
+function renderCounters(issue){
+  let base=0,md=0;
+  for(let s=T0;s<=issue;s+=5){const up=pcsU(s)>=.12;if(W.key!=='clear'&&up)base+=5;if(alertAt(s).level==='red')md+=5}
+  const hrs=Math.max(0,base-md)/60,L=hrs*S.idle;
+  $('#cL').textContent=L.toFixed(1);$('#cT').textContent=Math.round(L*S.price).toLocaleString('en-US');
+  $('#cC').textContent=(L*2.68).toFixed(1);$('#cH').textContent=hrs.toFixed(1);
+}
+function renderSoil(){
+  const days=+$('#days').value,rate=+$('#rate').value||0,tariff=+$('#tariff').value||0,cost=+$('#ccost').value||0;
+  $('#daysV').textContent=days;
+  let E=0;for(let m=0;m<=720;m++)E+=pcs(m)/60;
+  const loss=Math.min(25,rate*days),lostKwh=E*loss/100,cum=rate/100*E*tariff*days*(days+1)/2;
+  let best=0;if(rate>0&&E>0&&tariff>0){best=Math.ceil((-1+Math.sqrt(1+8*cost/(rate/100*E*tariff)))/2)}
+  $('#soilbars').innerHTML=`<div class="barrow">Expected clear-day energy: <b class="num">${fk(E)} kWh</b><div class="track"><div class="fill" style="width:100%;background:var(--sun)"></div></div></div><div class="barrow">Measured with dust: <b class="num">${fk(E-lostKwh)} kWh</b> (−${loss.toFixed(1)}%)<div class="track"><div class="fill" style="width:${100-loss}%;background:var(--sky)"></div></div></div><div class="barrow num">Energy value lost since last cleaning: <b>BDT ${Math.round(cum).toLocaleString('en-US')}</b></div>`;
+  const v=$('#verdict');
+  if(cum>=cost&&cost>0){v.style.background='var(--amber-soft)';v.textContent=`Clean now. Dust has already cost more than one cleaning (BDT ${cost.toLocaleString('en-US')}).`}
+  else{v.style.background='var(--leaf-soft)';v.textContent=best?`Not yet. At this dust rate, cleaning pays off about every ${best} days.`:'Not yet.'}
+}
+
+function render(){
+  const t=Math.round(S.t),issue=Math.max(T0,Math.floor(t/5)*5);
+  const ap=drawSky(t);
+  $('#camtag').textContent=`CAM-01  ${fmt(t)}  ${W.c.name}`;
+  $('#clock').textContent=fmt(t);$('#scrub').value=t;
+  const apEl=$('#approach');
+  if(ap){apEl.className='approach on';apEl.lastChild.textContent=`A cloud reaches the sun in about ${Math.max(1,Math.round(ap.tt))} min.`}
+  else if(W.k[t]<.7*W.c.base&&W.key!=='overcast'){apEl.className='approach on';apEl.lastChild.textContent='A cloud is covering the sun now.'}
+  else{apEl.className='approach';apEl.lastChild.textContent=W.key==='overcast'?'Thick cloud layer. Output stays low.':'No cloud is on course for the sun.'}
+  const a=alertAt(issue),ah=actionHTML(a),el=$('#action');el.className='action '+ah.cls;
+  if(el.dataset.k!==W.key+JSON.stringify(a)){el.innerHTML=ah.html;el.dataset.k=W.key+JSON.stringify(a)}
+  const f=forecast(issue),now=pAvg(t-4,t),ro=i=>{const m=Math.min(720,issue+5*(i+1)),pc=pcs(m);return[f.med[i]*pc,f.q05[i]*pc,f.q95[i]*pc]};
+  const r15=ro(2),r60=ro(11);
+  $('#readouts').innerHTML=`<div class="ro"><b class="num">${fk(now)} kW</b><span>Now</span></div><div class="ro"><b class="num">${fk(r15[0])} kW</b><span>In 15 min, 90%: ${fk(r15[1])} to ${fk(r15[2])}</span></div><div class="ro"><b class="num">${fk(r60[0])} kW</b><span>In 60 min, 90%: ${fk(r60[1])} to ${fk(r60[2])}</span></div>`;
+  drawChart(t,issue);renderCounters(issue);renderSms(issue);
+  const pb=$('#play');pb.textContent=S.playing?'Pause':'Play';pb.setAttribute('aria-pressed',S.playing);
+}
+
+$$('[data-scen]').forEach(b=>b.addEventListener('click',()=>{S.scen=b.dataset.scen;$$('[data-scen]').forEach(x=>x.setAttribute('aria-pressed',x===b));build(S.scen);S.t=startTime();drawGate();render()}));
+$$('[data-speed]').forEach(b=>b.addEventListener('click',()=>{S.speed=+b.dataset.speed;$$('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',x===b))}));
+$('#play').addEventListener('click',()=>{if(S.t>=T1)S.t=T0;S.playing=!S.playing;render()});
+$('#scrub').addEventListener('input',e=>{S.t=+e.target.value;S.playing=false;render()});
+$('#reveal').addEventListener('change',e=>{S.reveal=e.target.checked;render()});
+$('#site').addEventListener('change',e=>{S.site=e.target.value;S.idle=SITES[S.site].idle;$('#idle').value=S.idle;$('#ccost').value=SITES[S.site].clean;render();renderSoil()});
+$('#price').addEventListener('input',e=>{S.price=+e.target.value||0;render()});
+$('#idle').addEventListener('input',e=>{S.idle=+e.target.value||0;render()});
+['#days','#rate','#tariff','#ccost'].forEach(id=>$(id).addEventListener('input',renderSoil));
+window.addEventListener('resize',render);
+
+build(S.scen);S.t=startTime();drawGate();render();renderSoil();
+setInterval(()=>{if(!S.playing)return;S.t=Math.min(T1,S.t+S.speed);if(S.t>=T1)S.playing=false;render()},250);
+})();
+</script>
+</body>
+</html>
