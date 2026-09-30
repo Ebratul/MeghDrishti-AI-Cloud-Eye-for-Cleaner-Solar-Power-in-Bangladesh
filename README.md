@@ -6,7 +6,7 @@ MeghDrishti helps solar-plant operators anticipate fast-moving clouds and decide
 
 ## Demo
 
-Open [`MeghDrishti_ AI cloud-eye for cleaner solar in Bangladesh.html`](./MeghDrishti_%20AI%20cloud-eye%20for%20cleaner%20solar%20in%20Bangladesh.html) in a modern browser. No build step or dependencies are required.
+[Open the live demo](https://ebratul.github.io/MeghDrishti-AI-Cloud-Eye-for-Cleaner-Solar-Power-in-Bangladesh/), or open [`index.html`](./index.html) locally in a modern browser. No build step or dependencies are required.
 
 The demo lets you explore clear, partly cloudy, and overcast scenarios; switch between an illustrative Gazipur factory and the SKIPP'D benchmark site; replay and scrub through the day; and inspect forecast ranges, Bangla operator alerts, estimated diesel savings, and a panel-cleaning advisor. Savings and cleaning estimates use editable assumptions, not field measurements.
 
